@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for Event - HopeConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">HopeConnect</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="search.html" class="nav-link">Search Events</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="loading" class="loading">Loading event information...</div>
+        
+        <div id="registrationContent" style="display: none;">
+            <!-- 事件信息会动态加载到这里 -->
+            <div id="eventInfo" class="event-info-card"></div>
+            
+            <!-- 注册表单 -->
+            <div class="registration-form-container">
+                <h2>Register for Event</h2>
+                <form id="registrationForm" class="registration-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="userName">Full Name *</label>
+                            <input type="text" id="userName" name="userName" required 
+                                   placeholder="Enter your full name">
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="Enter your email">
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" 
+                                   placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tickets">Number of Tickets *</label>
+                            <select id="tickets" name="tickets" required>
+                                <option value="">Select quantity</option>
+                                <option value="1">1 Ticket</option>
+                                <option value="2">2 Tickets</option>
+                                <option value="3">3 Tickets</option>
+                                <option value="4">4 Tickets</option>
+                                <option value="5">5 Tickets</option>
+                                <option value="6">6+ Tickets (enter quantity)</option>
+                            </select>
+                            <span class="error-message" id="ticketsError"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="customTicketsGroup" style="display: none;">
+                        <label for="customTickets">Custom Ticket Quantity *</label>
+                        <input type="number" id="customTickets" name="customTickets" 
+                               min="7" max="20" placeholder="Enter number of tickets (7-20)">
+                        <span class="error-message" id="customTicketsError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comments">Additional Comments</label>
+                        <textarea id="comments" name="comments" rows="4" 
+                                  placeholder="Any special requirements or comments..."></textarea>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            Complete Registration
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="goBack()">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="successMessage" class="success-message" style="display: none;">
+            <div class="success-content">
+                <h2>🎉 Registration Successful!</h2>
+                <p>Thank you for registering for the event. You will receive a confirmation email shortly.</p>
+                <div class="success-details" id="successDetails"></div>
+                <div class="success-buttons">
+                    <button onclick="goToHome()" class="btn-primary">Back to Home</button>
+                    <button onclick="goToEvent()" class="btn-secondary">View Event Details</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="errorContainer" class="error-message" style="display: none;"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 HopeConnect. Making the world a better place, one event at a time.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/registration.js"></script>
+</body>
+</html>

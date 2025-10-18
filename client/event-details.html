@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - HopeConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">HopeConnect</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="search.html" class="nav-link">Search Events</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="loading" class="loading">Loading event details...</div>
+        
+        <div id="eventDetails" style="display: none;">
+        </div>
+        
+        <div id="errorContainer" class="error-message" style="display: none;"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 HopeConnect. Making the world a better place, one event at a time.</p>
+        </div>
+    </footer>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Registration</h3>
+            <p>This feature is currently under construction.</p>
+            <button id="modalOk" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/event-details.js"></script>
+</body>
+</html>
