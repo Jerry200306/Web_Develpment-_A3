@@ -9,25 +9,26 @@ const eventRoutes = require('./routes/events');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 静态文件服务
+// Static file service
 app.use(express.static('.')); 
 
-// 中间件
+// Middleware
+app.use('/admin', express.static(path.join(__dirname, '../admin')));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 日志中间件
+// Logging middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
 
-// 修复：确保路由正确挂载
-app.use('/api/events', eventRoutes);  // 修改这里！
+// Fix: Ensure routes are correctly mounted
+app.use('/api/events', eventRoutes);  // Modified here!
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-// API根路由
+// API root route
 app.get('/api', (req, res) => {
   res.json({
     message: 'Charity Events API Server',
@@ -44,15 +45,34 @@ app.get('/api', (req, res) => {
   });
 });
 
-// 404处理
-app.use('*', (req, res) => {
+// 🔥 New: Frontend route support - Handle AngularJS routing
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../admin/index.html'));
+});
+
+// 404 handling - Modified to exclude API routes
+app.use('*', (req, res, next) => {
+  // If it's an API route, return JSON format 404
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({
+      success: false,
+      message: `API endpoint ${req.originalUrl} not found`
+    });
+  }
+  
+  // For non-API routes, if it's admin path, return index.html (frontend routing)
+  if (req.path.startsWith('/admin/')) {
+    return res.sendFile(path.join(__dirname, '../admin/index.html'));
+  }
+  
+  // Other cases return generic 404
   res.status(404).json({
     success: false,
     message: `Route ${req.originalUrl} not found`
   });
 });
 
-// 错误处理
+// Error handling
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);
   res.status(500).json({
@@ -75,6 +95,7 @@ async function startServer() {
       console.log(`📍 API Base URL: http://localhost:${PORT}/api`);
       console.log(`📊 Events API: http://localhost:${PORT}/api/events`);
       console.log(`🔧 Health check: http://localhost:${PORT}/api/events/health`);
+      console.log(`👨‍💼 Admin Panel: http://localhost:${PORT}/admin`);
       console.log('✅ Server is ready to accept requests');
     });
   } catch (error) {
@@ -83,7 +104,7 @@ async function startServer() {
   }
 }
 
-// 优雅关闭
+// Graceful shutdown
 process.on('SIGINT', () => {
   console.log('\n👋 Shutting down server gracefully...');
   process.exit(0);
