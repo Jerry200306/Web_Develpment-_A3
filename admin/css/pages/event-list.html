@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">All Events</h2>
+        <a href="#!/events/create" class="btn btn-primary">
+            <span>+</span> Create New Event
+        </a>
+    </div>
+    
+    <div ng-if="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading events...</p>
+    </div>
+    
+    <div ng-if="!loading">
+        <div class="table-container">
+            <table class="table" ng-if="events.length > 0">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date & Time</th>
+                        <th>Location</th>
+                        <th>Ticket Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="event in events">
+                        <td>
+                            <strong>{{ event.name }}</strong>
+                            <div style="color: #64748b; font-size: 0.9rem;">{{ event.category_name }}</div>
+                        </td>
+                        <td>
+                            {{ formatDate(event.date) }}
+                            <div style="color: #64748b; font-size: 0.9rem;">{{ event.time || 'All day' }}</div>
+                        </td>
+                        <td>{{ event.location }}</td>
+                        <td>${{ event.ticket_price | number:2 }}</td>
+                        <td>
+                            <span class="status-badge" ng-class="getEventStatus(event) === 'active' ? 'status-active' : 'status-past'">
+                                {{ getStatusText(event) }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-warning btn-sm" ng-click="editEvent(event.id)">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" ng-click="deleteEvent(event.id, event.name)">
+                                    Delete
+                                </button>
+                                <button class="btn btn-primary btn-sm" ng-click="viewRegistrations(event.id)">
+                                    Registrations
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="empty-state" ng-if="events.length === 0">
+                <div class="empty-state-icon">📭</div>
+                <h3>No Events Found</h3>
+                <p>Get started by creating your first charity event.</p>
+                <a href="#!/events/create" class="btn btn-primary">
+                    Create Your First Event
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

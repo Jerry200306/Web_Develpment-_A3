@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityEventsAdmin">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Events - Admin Panel</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎗️</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    
+    <!-- 添加全局错误处理 -->
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Global error:', msg, 'at', url + ':' + lineNo);
+            return false;
+        };
+    </script>
+</head>
+<body ng-controller="NavController" ng-cloak>
+    <div class="admin-container">
+        <!-- 导航栏 -->
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <h1>🎗️ Charity Events Admin</h1>
+            </div>
+           <ul class="nav-menu">
+                <li><a href="#!/events" ng-click="navigateTo('/events')" ng-class="{ active: isActive('/events') }">Events</a></li>
+                <li><a href="#!/events/create" ng-click="navigateTo('/events/create')" ng-class="{ active: isActive('/events/create') }">Create Event</a></li>
+            </ul>
+            <div class="nav-user">
+                <span>Admin User</span>
+            </div>
+        </nav>
+
+        <main class="admin-main" ng-view></main>
+
+        <div class="notification" ng-class="notification.type" ng-show="notification.show">
+            {{ notification.message }}
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/services/apiService.js"></script>
+    <script src="js/controllers/navController.js"></script>
+    <script src="js/controllers/eventListController.js"></script>
+    <script src="js/controllers/eventCreateController.js"></script>
+    <script src="js/controllers/eventEditController.js"></script>
+    <script src="js/controllers/registrationsController.js"></script>
+    
+    <script>
+        setTimeout(function() {
+            console.log('=== MANUAL ROUTE TEST ===');
+            var appElem = document.querySelector('[ng-app]');
+            if (appElem) {
+                var injector = angular.element(appElem).injector();
+                if (injector) {
+                    var $location = injector.get('$location');
+                    var $route = injector.get('$route');
+                    console.log('Manual test - $location:', $location);
+                    console.log('Manual test - $route:', $route);
+                    
+                    window.testNavigate = function(path) {
+                        console.log('Manual navigation to:', path);
+                        $location.path(path);
+                        angular.element(appElem).scope().$apply();
+                    };
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

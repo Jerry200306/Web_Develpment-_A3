@@ -1,0 +1,76 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Event Registrations</h2>
+        <button class="btn btn-secondary" ng-click="backToEvents()">
+            ← Back to Events
+        </button>
+    </div>
+    
+    <div ng-if="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading registration data...</p>
+    </div>
+    
+    <div ng-if="!loading && event">
+        <!-- Event information -->
+        <div class="event-info-card">
+            <h3>{{ event.name }}</h3>
+            <div class="event-info-grid">
+                <div class="event-info-item">
+                    <span class="event-info-label">Date</span>
+                    <span class="event-info-value">{{ formatDate(event.date) }} {{ event.time || '' }}</span>
+                </div>
+                <div class="event-info-item">
+                    <span class="event-info-label">Location</span>
+                    <span class="event-info-value">{{ event.location }}</span>
+                </div>
+                <div class="event-info-item">
+                    <span class="event-info-label">Total Registrations</span>
+                    <span class="event-info-value">{{ getTotalRegistrations() }}</span>
+                </div>
+                <div class="event-info-item">
+                    <span class="event-info-label">Total Tickets</span>
+                    <span class="event-info-value">{{ getTotalTickets() }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Registration list -->
+        <div class="table-container">
+            <table class="table" ng-if="registrations.length > 0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Tickets</th>
+                        <th>Registration Date</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="registration in registrations">
+                        <td>
+                            <strong>{{ registration.user_name }}</strong>
+                        </td>
+                        <td>{{ registration.email }}</td>
+                        <td>{{ registration.phone || 'N/A' }}</td>
+                        <td>
+                            <span class="status-badge status-active">
+                                {{ registration.tickets_purchased }}
+                            </span>
+                        </td>
+                        <td>{{ formatDate(registration.registration_date) }}</td>
+                        <td>{{ registration.comments || 'No comments' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="empty-state" ng-if="registrations.length === 0">
+                <div class="empty-state-icon">👥</div>
+                <h3>No Registrations Yet</h3>
+                <p>This event doesn't have any registrations yet.</p>
+            </div>
+        </div>
+    </div>
+</div>

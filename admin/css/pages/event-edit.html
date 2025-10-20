@@ -1,0 +1,147 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Edit Event</h2>
+        <div class="header-actions">
+            <button class="btn btn-secondary" ng-click="cancelEdit()" title="Cancel editing" ng-disabled="submitting">
+                ← Back to Event List
+            </button>
+            <button class="btn btn-outline" ng-click="resetForm()" title="Reset form" ng-disabled="submitting">
+                ↺ Reset
+            </button>
+        </div>
+    </div>
+    
+    <!-- Loading state -->
+    <div ng-if="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading event data...</p>
+    </div>
+    
+    <!-- Error state -->
+    <div ng-if="!loading && !event" class="error-state">
+        <p>Unable to load event data, please try again later.</p>
+        <button class="btn btn-primary" ng-click="loadEventData()">Reload</button>
+    </div>
+    
+    <!-- Form -->
+    <form name="eventForm" ng-submit="updateEvent()" ng-if="!loading && event" novalidate>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="edit-event-name">Event Name *</label>
+                <input type="text" class="form-control" id="edit-event-name" name="name" 
+                       ng-model="event.name" required
+                       placeholder="Enter event name">
+                <span class="validation-error" ng-show="eventForm.name.$touched && eventForm.name.$error.required">
+                    Event name is required
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="edit-event-category">Category *</label>
+                <select class="form-control" id="edit-event-category" name="category_id" 
+                        ng-model="event.category_id" required>
+                    <option value="">Select a category</option>
+                    <option ng-repeat="category in categories" value="{{ category.id }}">
+                        {{ category.name }}
+                    </option>
+                </select>
+                <span class="validation-error" ng-show="eventForm.category_id.$touched && eventForm.category_id.$error.required">
+                    Category is required
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="edit-event-description">Short Description *</label>
+            <textarea class="form-control" id="edit-event-description" name="description" 
+                      rows="2" ng-model="event.description" required
+                      placeholder="Enter short description"></textarea>
+            <span class="validation-error" ng-show="eventForm.description.$touched && eventForm.description.$error.required">
+                Description is required
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="edit-event-full-description">Full Description</label>
+            <textarea class="form-control" id="edit-event-full-description" name="full_description" 
+                      rows="4" ng-model="event.full_description"
+                      placeholder="Enter full description (optional)"></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="edit-event-date">Date *</label>
+                <input type="date" class="form-control" id="edit-event-date" name="date" 
+                       ng-model="event.date" required
+                       pattern="\d{4}-\d{2}-\d{2}">
+                <span class="validation-error" ng-show="eventForm.date.$touched && eventForm.date.$error.required">
+                    Date is required
+                </span>
+                <span class="validation-error" ng-show="eventForm.date.$touched && eventForm.date.$error.pattern">
+                    Date format must be YYYY-MM-DD
+                </span>
+                <small class="form-hint">Format: Year-Month-Day (e.g., 2025-10-09)</small>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="edit-event-time">Time</label>
+                <input type="time" class="form-control" id="edit-event-time" name="time" 
+                       ng-model="event.time"
+                       placeholder="HH:MM">
+                <small class="form-hint">Format: Hour:Minute (e.g., 14:30)</small>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="edit-event-location">Location *</label>
+                <input type="text" class="form-control" id="edit-event-location" name="location" 
+                       ng-model="event.location" required
+                       placeholder="Enter event location">
+                <span class="validation-error" ng-show="eventForm.location.$touched && eventForm.location.$error.required">
+                    Location is required
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="edit-event-venue">Venue Name</label>
+                <input type="text" class="form-control" id="edit-event-venue" name="venue_name" 
+                       ng-model="event.venue_name"
+                       placeholder="Enter venue name (optional)">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="edit-event-ticket-price">Ticket Price ($)</label>
+                <input type="number" class="form-control" id="edit-event-ticket-price" name="ticket_price" 
+                       min="0" step="0.01" ng-model="event.ticket_price"
+                       placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="edit-event-goal-amount">Goal Amount ($)</label>
+                <input type="number" class="form-control" id="edit-event-goal-amount" name="goal_amount" 
+                       min="0" step="0.01" ng-model="event.goal_amount"
+                       placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="edit-event-image">Image URL</label>
+            <input type="url" class="form-control" id="edit-event-image" name="image_url" 
+                   ng-model="event.image_url" 
+                   placeholder="https://example.com/image.jpg">
+            <small class="form-hint">Please enter the complete image URL</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success" ng-disabled="submitting">
+                <span ng-if="!submitting">Update Event</span>
+                <span ng-if="submitting">Updating...</span>
+            </button>
+            <button type="button" class="btn btn-secondary" ng-click="cancelEdit()" ng-disabled="submitting">
+                Cancel
+            </button>
+            <button type="button" class="btn btn-outline" ng-click="resetForm()" ng-disabled="submitting">
+                Reset
+            </button>
+        </div>
+    </form>
+</div>
